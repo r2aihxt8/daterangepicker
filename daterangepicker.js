@@ -78,7 +78,9 @@
             customRangeLabel: 'Custom Range',
             daysOfWeek: moment.weekdaysMin(),
             monthNames: moment.monthsShort(),
-            firstDay: moment.localeData().firstDayOfWeek()
+            firstDay: moment.localeData().firstDayOfWeek(),
+            showMonthAfterYear: false,
+            yearSuffix: ''
         };
 
         this.callback = function() { };
@@ -159,7 +161,14 @@
                 var rangeHtml = elem.value;
                 this.locale.customRangeLabel = rangeHtml;
             }
+
+            if (typeof options.locale.showMonthAfterYear === 'boolean')
+                this.locale.showMonthAfterYear = options.locale.showMonthAfterYear;
+
+            if (typeof options.locale.yearSuffix === 'string')
+                this.locale.yearSuffix = options.locale.yearSuffix;
         }
+
         this.container.addClass(this.locale.direction);
 
         if (typeof options.startDate === 'string')
@@ -704,7 +713,10 @@
                 html += '<th></th>';
             }
 
-            var dateHtml = this.locale.monthNames[calendar[1][1].month()] + calendar[1][1].format(" YYYY");
+            var dateHtml = this.locale.monthNames[calendar[1][1].month()] + calendar[1][1].format(" YYYY") + this.locale.yearSuffix;
+            if (this.locale.showMonthAfterYear) {
+                dateHtml = calendar[1][1].format("YYYY") + this.locale.yearSuffix + ' ' + this.locale.monthNames[calendar[1][1].month()];
+            }
 
             if (this.showDropdowns) {
                 var currentMonth = calendar[1][1].month();
